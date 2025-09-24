@@ -86,7 +86,7 @@ class SignInActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         progressDialogSignIn.dismiss()
-        finish()
+        finishAffinity()
     }
 
     override fun onDestroy() {

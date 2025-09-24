@@ -45,6 +45,9 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             />
+        <argument
+            android:name="users"
+            app:argType="com.example.chatapp.modal.Users" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"

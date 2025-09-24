@@ -4,14 +4,17 @@ package com.example.chatapp.fragments
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -75,7 +78,11 @@ class HomeFragment : Fragment(),OnUserClickListener {
     }
 
     override fun onUserSelected(position: Int, users: Users) {
-        TODO("Not yet implemented")
+//
+        val action = HomeFragmentDirections.actionHomeFragmentToChatFragment(users)
+        view?.findNavController()?.navigate(action)
+        Toast.makeText(requireContext(),"click on { ${users.name} }",Toast.LENGTH_SHORT).show()
+        Log.e("HomeFragment","click on {${users.name}}")
     }
 
 
