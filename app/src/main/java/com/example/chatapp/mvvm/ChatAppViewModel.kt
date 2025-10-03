@@ -8,6 +8,7 @@ import com.example.chatapp.MyApplication
 import com.example.chatapp.SharePrefs
 import com.example.chatapp.Utils
 import com.example.chatapp.modal.Messages
+import com.example.chatapp.modal.RecentChat
 import com.example.chatapp.modal.Users
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,7 @@ class ChatAppViewModel :ViewModel() {
 
     val userRepo = UserRepo()
     val messageRepo = MessageRepo()
+    val RecenchatRepo = ChatListRepo()
     init {
         getCurrentUser()
     }
@@ -94,5 +96,8 @@ class ChatAppViewModel :ViewModel() {
     }
     fun getMessages(friendid:String): LiveData<List<Messages>>{
         return messageRepo.getMessages(friendid)
+    }
+    fun getRecentChat() :LiveData<List<RecentChat>>{
+        return RecenchatRepo.getAllchatlist()
     }
 }

@@ -19,9 +19,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chatapp.R
+import com.example.chatapp.adapter.OnRecentChatClicked
 import com.example.chatapp.adapter.OnUserClickListener
+import com.example.chatapp.adapter.RecentChatAdapter
 import com.example.chatapp.adapter.UserAdapter
 import com.example.chatapp.databinding.FragmentHomeBinding
+import com.example.chatapp.modal.RecentChat
 import com.example.chatapp.modal.Users
 import com.example.chatapp.mvvm.ChatAppViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -29,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 
 @Suppress("DEPRECATION")
-class HomeFragment : Fragment(),OnUserClickListener {
+class HomeFragment : Fragment(),OnUserClickListener,OnRecentChatClicked {
     lateinit var rvUsers :RecyclerView
     lateinit var userAdapter: UserAdapter
     lateinit var userviewmodel: ChatAppViewModel
@@ -38,6 +41,8 @@ class HomeFragment : Fragment(),OnUserClickListener {
     lateinit var homepd:ProgressDialog
     lateinit var toolbar: Toolbar
     lateinit var circleImageView: CircleImageView
+    lateinit var recentChatAdapter: RecentChatAdapter
+    lateinit var rvRecentchat:RecyclerView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,9 +64,10 @@ class HomeFragment : Fragment(),OnUserClickListener {
         circleImageView = view.findViewById(R.id.tlImage)
 
         rvUsers = view.findViewById(R.id.rvUsers)
-
+        rvRecentchat = view.findViewById(R.id.rvRecentChats)
 
         val layoutmanager = LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false)
+        rvRecentchat.layoutManager = LinearLayoutManager(activity)
         rvUsers.layoutManager = layoutmanager
 
         userviewmodel.getUsers().observe(viewLifecycleOwner, Observer {
@@ -75,7 +81,18 @@ class HomeFragment : Fragment(),OnUserClickListener {
         userviewmodel.imageUrl.observe(viewLifecycleOwner,Observer{
             Glide.with(requireContext()).load(it).into(circleImageView)
         })
+        recentChatAdapter = RecentChatAdapter()
+        recentChatAdapter.setOnlistener(this)
+
+        userviewmodel.getRecentChat().observe(viewLifecycleOwner,Observer{
+            Log.d("HomeFragment", "RecentChat size = ${it.get(0)}")
+
+            recentChatAdapter.setOnlist(it)
+            rvRecentchat.adapter = recentChatAdapter
+
+        })
     }
+
 
     override fun onUserSelected(position: Int, users: Users) {
 //
@@ -83,6 +100,23 @@ class HomeFragment : Fragment(),OnUserClickListener {
         view?.findNavController()?.navigate(action)
         Toast.makeText(requireContext(),"click on { ${users.name} }",Toast.LENGTH_SHORT).show()
         Log.e("HomeFragment","click on {${users.name}}")
+    }
+
+    override fun getOnRecentChatClicked(position: Int, recentChatlist: RecentChat) {
+        try{
+            val action =
+                HomeFragmentDirections.actionHomeFragmentToChatFromHomeFragment(recentChatlist)
+            view?.findNavController()?.navigate(action)
+        }
+        catch (
+            e : Exception
+        ){
+            Log.e("Homfragmeng",e.toString())
+        }
+
+
+
+
     }
 
 
