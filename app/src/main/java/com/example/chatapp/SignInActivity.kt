@@ -29,9 +29,9 @@ class SignInActivity : AppCompatActivity() {
         // if user has already log in
         // just has to log in once
 
-//        if(auth.currentUser != null){
-//            startActivity(Intent(this,MainActivity ::class.java))
-//        }
+        if(auth.currentUser != null){
+            startActivity(Intent(this,MainActivity ::class.java))
+        }
         progressDialogSignIn = ProgressDialog(this)
 
         signInBinding.signInTextToSignUp.setOnClickListener {
@@ -86,7 +86,7 @@ class SignInActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         progressDialogSignIn.dismiss()
-        finish()
+        finishAffinity()
     }
 
     override fun onDestroy() {
